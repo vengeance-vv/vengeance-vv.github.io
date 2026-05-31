@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal</title>
+    <script src="https://ably.com"></script>
+    <style>
+        /* BASE RETRO HACKER THEME */
+        body {
+            background-color: #020b02;
+            color: #33ff33;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 30px;
+            margin: 0;
+            font-size: 1.1rem;
+            transition: background-color 1.5s ease, color 1.5s ease;
+        }
+        #terminal {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        #terminal-log {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .prompt {
+            margin-right: 12px;
+            user-select: none;
+            color: #33ff33;
+            transition: color 1.5s ease;
+        }
+        #user-input {
+            background: transparent;
+            border: none;
+            color: #33ff33;
+            font-family: inherit;
+            font-size: 1.1rem;
+            flex: 1;
+            outline: none;
+            transition: color 1.5s ease;
+        }
+
+        /* SECRET PITCH BLACK STEALTH MODE */
+        body.stealth-mode {
+            background-color: #000000;
+            color: #777777;
+        }
+        body.stealth-mode .prompt, 
+        body.stealth-mode #user-input {
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+
+<div id="terminal">
+    <div id="terminal-log"></div>
+    <div class="input-line">
+        <span class="prompt">></span>
+        <input type="text" id="user-input" autofocus autocomplete="off" disabled>
+    </div>
+</div>
+
+<script>
+    // 1. CHANGE WHAT THE TERMINAL TYPES BACK HERE:
+    const systemResponse = "What Is a Google Dork?
+A “Google dork” is an advanced Google search technique. “Google dorking” (aka “Google hacking”) is the activity of performing advanced searches on Google. You can combine different Google dorks to comb data otherwise inaccessible to ordinary users of Google search.
+
+Google Dorking is a powerful OSINT (Open Source Intelligence) technique. By using specific search queries, ethical hackers can locate exposed credentials, discover misconfigured directories, identify admin login panels, and even find unsecured cameras. 
+
+These search operators transform Google into an incredibly powerful and free reconnaissance tool, making it an essential skill for penetration testers and cyber security professionals.
+
+Legal and Ethical Implications
+It’s crucial to recognize that Google Dorking has a fine line between ethical and unethical use, as well as between legal and illegal activities.
+
+Google Dorking can uncover a treasure trove of information, but searching and interacting are two different things. While on Google, everything you are doing should be fine from a legal standpoint. Once you click a link, however, you are now interacting with the information, and that’s where things get murky.
+
+If you end up somewhere you aren’t supposed to be, you could be breaking a local or international law. Remember, some files are intended to be hidden, and many cameras are supposed to be isolated. 
+
+The fact that they’re exposed isn’t that different from finding a weak password - it may be the organization's security failure, but that doesn’t grant you permission to download or interact with it any more than you have the authority to use that password to access someone else’s account.
+
+Keep this in mind when Google Dorking - anything that doesn’t directly interact with the target or its staff is passive. Clicking into their website, even the homepage, is active. If you go somewhere they did not intend visitors to go, you could find yourself in trouble, so always get permission.
+
+Quick Notes
+On a browser, if you make too many Google searches in a short time, Google requires that you unscramble garbled letters in an image called a captcha before you can proceed. Captcha completion can frustrate end users like you, but Google servers must nip denial-of-service cyberattacks in the bud.
+Unlike most cheat sheets, we cannot guarantee that the commands below will remain unchanged in perpetuity. Google updates its dorks continually, so deprecated techniques don’t appear here, even if you can find them elsewhere on the Internet.
+Before You Begin Google Dorking
+Google dorking is not a playground where you can flood commands to your heart’s content:
+
+Google limits your Google search rate from a single device.
+It may ban your IP if you issue too many queries.
+Abuse of dorks may have legal repercussions.
+If you know you can’t resist having fun with it (and you will), you could work from Pagodo, which automates Google searching for potentially vulnerable web pages and applications on the Internet. It also lets you automate the rate at which your device issues Google dorks.
+
+Regardless of how you use Google dorks, respect Google’s Terms of Service. Be careful.
+
+
+GOOGLE DORKING HACKER COURSE
+Uncover Hidden Data with Advanced Google & OSINT.
+
+Examples of Creepy Dorks
+These dorks reveal vulnerabilities in websites, and their contents may be newsworthy depending on the zeitgeist.
+
+For details on how the following commands work, refer to Text dorks, Google Dorks Operators, and Scope-Restricting Dorks.
+
+Examples	Description
+inurl:"view.shtml" "Network Camera", "Camera Live Image", inurl:"guestimage.html", intitle:"webcamXP 5’"	Get web applications showing live webcam (online camera) footage.
+"Not for Public Release" + "Confidential" ext:pdf | ext:doc | ext:xlsx	Get links to documents meant to be classified. Some come from governmental websites.
+site:.hk & inurl:wp-login	Get login pages of WordPress sites ending in the notoriously unsafe domain “.hk”
+”index of” inurl:ftp secret	Get FTP servers you want to access containing the keyword “secret”
+Critical dorks performed on .env files yielding results such as:
+filetype:env [and a sensitive parameter] - Google Search - Google Search results on .env files containing a sensitive parameter.	Popular web development frameworks use .env files to declare general variables and configurations for local and online dev environments, often including passwords.
+The dork used to produce the screenshot exposes database passwords. Hence it’s vital to keep .env files from being publicly accessible.
+(If you’ve read this cheat sheet in its entirety, you will be able to guess the dork used here.)
+This often-updated exploit database contains other Google dorks that expose sensitive information. Proceed with caution.
+
+Google Dorks Search Parameters
+A search parameter in a Google dork is the text string payload affixed to or used with the Google dorking command or operator. Without a suitable search parameter, Google treats the dork keyword as an ordinary query keyword at best and returns zero results at worst.
+
+For example, in the search site:www.stationx.net, the domain “www.stationx.net” is the parameter. In (psychology OR computer science) AND design, the three subjects of psychology, computer science, and design are the parameters. In 16 F to C (converting a temperature from degrees Fahrenheit to Celsius), 16 is the parameter.
+
+Search parameters include web domains, file extensions, numbers, and character strings with or without quotes.
+
+
+Google Dorking Commands
+As Google’s internal documentation on dorks frequently changes, the following is not an exhaustive list but a list of commands known to return meaningful results. Some of the given commands may be obsolete because they return similar results as a dork-free search. Deprecated commands don’t appear below.
+
+Scope-Restricting Dorks
+These help specify your target range of websites or data types. For example, in hunting for e-books, the Google dork “filetype:pdf” is indispensable.
+
+If a command listed below ends with a symbol, include no space between the command and the parameter. The correct way to use each command is in the “Example usage” column. Otherwise, Google will treat the command as an ordinary search keyword rather than a dork.
+
+Command	Description	Example usage
+site:	Restrict search to a particular website, top-level domain, or subdomain.
+Additional query items are optional.	site:google.com,
+site:maps.google.com,
+site:.org tax return
+filetype:, ext:	Restrict the returned web addresses to the designated file type.
+
+Unlike most other dorks, this requires additional keywords in the search bar or will return no results.
+
+Here is Google’s official list of common file types it can search.
+
+Google also supports the file extensions db, log, and html.
+
+Nonetheless, searches on mp3 and mp4 with and without additional search terms have yielded no results.	filetype:pdf car design, ext:log username
+
+Compare with filetype:pdf, ext:txt, etc.filetype.pdf - Google Search - "Your search - filetype.pdf - did not match any results."
+
+ext:txt - Google Search - About 5,420,000 results (0.21 seconds)
+@	Restrict search to a particular social platform.
+It supports popular platforms such as Facebook, Twitter, YouTube, and Reddit.
+A downside is it’s not as precise as the “site:” dork.	@twitter pentest, @youtube google dorking
+define:	Return definitions of a word or phrase	Compare define:privacy and a plain search on privacy.
+stocks:	Check the financial activity of a particular stock	stocks:META (Meta),
+stocks:gm (General Motors),
+stocks:pfizer
+movie:	Return information about any movie with the given title	Compare movie:"phantom of the opera" and "phantom of the opera".
+source:	Find reports from a Google News source.	source:cnn
+Informational Dorks
+These dorks appear to work best if used as standalone commands, i.e., without additional query items.
+
+Command	Description	Example usage
+$	Search for prices in USD ($). This also works for Euro (€), but not GBP (£) or Yen (¥).	ipad $329, iphone €239
+cache:	Get Google’s last saved version of a particular website. A website snapshot like this is called “cache”.	cache:news.yahoo.com
+link:	Find pages linking to the given domain	link:www.stationx.net
+related:	Return websites related to the given website	related:harvard.edu, related:bbc.co.uk
+map:	Get a map of the given location	map:"new york"
+weather:	Get the weather of the given location	weather:london
+Usable but possibly deprecated commands
+location:	Find information about a location.
+
+Results may be inconsistent.
+
+Google now treats “loc” (formerly an abbreviation of “location”) as a search term instead of a dork.	location:NY crime compared with NY crime.
+info:, id:	Return pages that convey information about the given website.
+
+Finding queries that gave different results with and without the “info:” / “id:” command was difficult.
+
+This command could still help you find the canonical, indexed version of a URL.
+
+Google now treats “id” (possibly shorthand for “info”) as a search term instead of a dork.	"babylon bee" vs info:"babylon bee": a politically conservative satire website in the US
+"babylon bee" - Google Search - About 545,000 results (0.43 seconds)
+
+info:"babylon bee" - Google Search - About 236 results (0.41 seconds)
+
+Here’s how id:"babylon bee" treats “id” as a search parameter (bold text) in some results:
+An entry in [id:"babylon bee" - Google Search] - Example of Google Search treating "id" as another query keyword - Example of Google Search treating "id" as another query keyword
+
+An entry in [id:"babylon bee" - Google Search] - Example of Google Search treating "id" as another query keyword
+Google Dork Generator
+Say goodbye to the hassle of trying to remember the exact syntax for your Google Dorks! With our Google Dork Generator, you can simply say what you need to do, and we will generate the Google Dork for you.
+
+Get web applications showing li
+Generate
+Text Dorks
+These are helpful if you want to look for web pages containing certain text strings or follow particular patterns. For example, those familiar with the URLs of webcam apps, for example, use Google dorks similar to the first entry in this table to find camera footage to watch.
+
+Command	Description	Example usage
+intitle:, allintitle:	Look for pages with titles containing the search terms.
+
+The dork “intitle:” applies to its search parameter only, while “allintitle:” applies to the entire query string.	intitle:toy story, intitle:"toy story", allintitle:"toy story", allintitle:toy story
+
+Compare the above with the number of search results of toy story and "toy story".
+inurl:	Find links containing the character string.	inurl:login.php
+allinurl:	Find links containing all words following the colon (:).
+
+Equivalent to applying “inurl:” to discrete search strings.	Compare allinurl: healthy eating vs inurl:healthy inurl:eating:
+allinurl: healthy eating - Google Search - About 972,000 results (0.53 seconds)
+
+inurl:healthy inurl:eating - Google Search - About 971,000 results (0.49 seconds)
+Usable but possibly deprecated commands
+intext:, allintext:	Find websites containing the payload.
+
+The dork “intext:” applies to its search parameter only, while “allintext:” applies to the entire query string.
+
+The websites displayed in the results appear similar to a search without either command.	Compare intext:"Index of /" +.htaccess, allintext:"Index of /" +.htaccess, and "Index of /" +.htaccess.
+
+Look at intext:"Index of /" +.htaccess -intitle:"Index of /" (exclude titles containing the search query) too.
+Google Dorks Operators
+Unlike certain Google Dorking commands, you may include spaces between Google dorking operators and your query items. You may combine as many different operators and commands as are necessary.
+
+Search
+These refine the search and constrain the results to follow the rules of logic. Most of the following are logical operators.
+
+Command	Description	Example usage
+" "	Return exact matches of a query string enclosed in the double quotes.
+Note that these are straight and not curly “” quotation marks. The curly quotes may or may not return similar results as straight quotes.
+Single quotes don’t work.	"Google dorking commands".
+Compare 'movie review' and "movie review":
+'movie review' - Google Search. - Single quotes enclosing the phrase 'movie review'. About 5,700,000,000 results (0.78 seconds)
+
+"movie review" - Google Search - Double quotes enclosing the phrase "movie review". About 63,900,000 results (0.89 seconds)
+OR, |	Return sites containing either query item joined by OR or the pipe character |.
+This is an inclusive OR.	Amazon OR Google yields the same number of results as Amazon | Google.
+Amazon OR Google - Google Search - About 25,270,000,000 results (0.58 seconds)
+
+Amazon | Google - Google Search - About 25,270,000,000 results (0.42 seconds)
+( )	Group multiple Google dork operators as a logical statement	(black OR white) hat hacker
+-	Hyphen; exclude search results containing the word or phrase after the hyphen.	Amazon -reviews, "sql injection" -"penetration testing"
+*	Wildcard or glob pattern as a placeholder for query item	"type * error" returns pages on Type I and II errors in statistics.
+Compare this with the search “type i OR ii error” which doesn’t use this wildcard:
+"type * error" - Google Search - About 4,130,000,000 results (0.70 seconds)
+
+type i OR ii error - Google Search - About 3,450,000,000 results (0.62 seconds)
+#..#	Search a numerical range specified by the two endpoints # inclusive	2006..2008 finds all pages that include 2006, 2007, or 2008 in them.
+AROUND(N)	Match pages containing the search terms separated by at most N other words	read AROUND(2) book, read AROUND(3) book
+Information Security Courses Bundles
+Want lifetime access to expert-led cyber security training? Explore our Information Security Course Bundles — one-time purchase packages covering top topics like Ethical Hacking, Cloud, Linux, DevSecOps, and CompTIA certifications.
+
+Usable but possibly deprecated commands
+AND, &, +	Concatenation; return sites containing both query items joined by AND, the ampersand symbol & or the plus sign +.
+Google seems to assume you’re using this dork whenever you have multiple search items in one query.
+This is because the websites in the dorked search results are similar to queries without these dorks. Curiously, the estimated number of search results differs.	Amazon AND Google, Amazon & Google, Amazon + Google. 
+
+Compare with Amazon Google (no quotes):
+Amazon AND Google - Google Search - About 4,730,000,000 results (0.42 seconds)
+
+
+Amazon & Google - Google Search - About 4,040,000,000 results (0.44 seconds)
+
+Amazon + Google - Google Search - About 5,040,000,000 results (0.68 seconds)
+
+Amazon Google - Google Search - About 4,280,000,000 results (0.63 seconds)
+_	Wildcard symbol for Google Autocomplete.
+Google appears to treat this symbol literally if it’s inside double quotes.	Suppose you can’t recall the name of the late singer Michael Jackson:
+Michael _ singer, "Michael _" singer. Michael _ singer - Google Search - About 342,000,000 results (0.62 seconds)
+
+"Michael _" singer - Google Search - About 33,700 results (0.35 seconds)
+Compare with Michael singer, "Michael *" singer.
+Michael singer - Google Search - About 476,000,000 results (0.55 seconds)
+
+"Michael *" singer - Google Search - About 228,000,000 results (0.70 seconds)
+Only "Michael *" singer has a direct entry about Michael Jackson on the first page of the search results:
+"Michael *" singer - Google Search - result: "Biography for Kids: Michael Jackson - Ducksters" Occupation: Singer; Born August 29, 1958 in Gary, Indiana; Died: June 25, 2009 in Los Angeles
+Math
+The following are mathematical operations that you can perform on Google.
+
+Operators	Description	Example usage	Result
++	Addition	3 + 20	23
+-	Subtraction	3 - 20	-17
+*	Multiplication	3 * 20	60
+/	Division	3 / 20	0.15
+% of	Percentage	33% of 400	6.6
+X^Y, X**Y	Raise X to the power of Y.
+Both operators ^ and ** perform the same operation.	3^2, 3**2	3^2 = 93**2 = 9
+in, to	Convert a quantity from a given unit to another. Translate words into another language.	6 ft 2 inches in cm,140 lbs in kg,100 USD to bitcoin,8 am London time to California time,thank you in spanish	6 ft 2 inches = 187.96 cm,140 lbs = 63.5029 kg,100 USD =
+100 USD = 0.000052 bitcoin (BTC) on 11 Oct 2022, 1:05pm UTC - Google Search
+
+8:00am Tuesday in London, UK is 12:00am Tuesday in California, USA - Google Search
+
+"thank you" in English = "gracias" in Spanish - Google Search
+sqrt	Square root	sqrt(3)	1.73205080757
+i	Imaginary number.
+Use it with other mathematical operations to see it in action.	i^2	-1
+N choose R	Find how many combinations are possible from N items taken R at a time, where N and R are integers.
+(Combinatorics)	6 choose 4	15
+sin, cos, tan	Trigonometric functions. You may specify the formula using symbols and natural language.	sin(pi/6), sin 30 degrees	sin(pi/6) = 0.5, sin 30 degrees = 0.5
+timer	Timer	timer for 20 minutes	Google Timer for 20 minutes: 20m00s. It counts down upon page load. - Google Search
+[This has no specific operator]	Generate a random number.
+Find more on the drop-down dialog box labeled “Tools” on the results page.	flip a coin, roll a dice, show random number from 10 to 40	Flip a coin - with drop-down dialog box labeled "Tools" on the results page - Google Search
+
+Roll a dice - Google Search
+Show random number from 10 to 40 (Google displays 28 here) - Google Search
+[graph] EXPRESSION [from A to B]	Graph a mathematical EXPRESSION with variables x and y on an (optional) numerical range from A to B.
+The “graph” keyword is only necessary if Google doesn’t understand your query.	sin(x)/x, graph log(x), 
+sqrt(x^2+y^2) from -20 to 20	Graph of y=sin(x)/x looks like a peak at x=0 and decreasing ripples towards both horizontal infinities. [sin(x)/x - Google Search]
+
+Graph of y=log(x) looks like a curved arm reaching from bottom left to top right. [graph log(x) - Google Search]
+
+Graph of z=sqrt(x^2+y^2) looks like a paper cone with the tip at (x,y)=(0,0). [sqrt(x^2+y^2) from -20 to 20 - Google Search]
+Google also supports other scientific calculator operations on its calculator. This website features additional examples of mathematical operations you can perform on Google.
+
+Download the PDF Version of This Google Dorks Cheat Sheet!
+Want to keep this cheat sheet at your fingertips? Just enter your email address, and we’ll send a PDF copy to your inbox.
+First name
+Email Address
+
+DOWNLOAD →
+Examples of Complex Google Dorks
+You can combine Google dorking commands and operations for specific results.
+
+Command	Description
+inurl:zoom.us/j intext:scheduled	Get links to publicly shared Zoom meetings you may want to access.
+"index of" "database.sql.zip"	Get unsecured SQL dumps.
+Data from improperly configured SQL servers will show up on this page.
+filetype:yaml inurl:cassandra	Get YAML configuration files specific to Apache Cassandra databases
+@youtube trending shorts	Find short clips trending on YouTube
+@reddit memes -dark	Find memes on Reddit that are not dark
+site:cdn.cloudflare.net filetype:pdf	Find PDFs on the *.cdn.cloudflare.net domain
+secret in spanish inurl:dict	Translate the word “secret” to Spanish and limit results to URLs containing “dict”
+filetype:doc site:www.stationx.net nathan	StationX with the .doc extension. This looks for legacy Microsoft Word files containing the keyword “nathan” (founder’s name).
+Extension
+Google Dorking Cheat Sheet: Quick Tips and Best Practices
+Google Dorking is a powerful technique, but mastering it requires a clear understanding of best practices and use cases. This section offers quick, actionable tips to help you use Google Dorks effectively and ethically.
+
+How to Use Google Dorks Effectively
+Use Quotation Marks for Exact Phrases: Enclose your search term in quotes ("example phrase") to find exact matches, minimizing irrelevant results.
+Stack Operators for Precision: Combine multiple operators to refine your search. For example, site:example.com filetype:pdf "passwords" helps you locate specific PDF files containing sensitive terms on a targeted domain.
+Target Specific Sites and File Types: Use site: to restrict searches to a specific domain and filetype: to limit results to certain file types, such as PDF, DOCX, LOG, ZIP, TAR.GZ, ENV, JS, PY, GIT, or TXT.
+Experiment and Adjust: Google Dorks may become outdated or restricted over time. Regularly test and refine your queries for accuracy.
+Popular Use Cases for Google Dorking
+Finding Exposed Cameras: Use queries like inurl:/view/view.shtml to locate unsecured cameras streaming online.
+Locating Misconfigured WordPress Admin Pages: Try intitle:"index of" "wp-admin" to discover exposed admin directories.
+Discovering Login Panels: Use inurl:login or intitle:"login" to identify login pages on websites quickly.
+Identifying Leaked Documents: Refine your search with filetype:pdf intext:"confidential" to find documents that may contain sensitive information. Other intext: terms to consider are
+classified
+internal
+restricted
+release
+password
+proprietary
+private
+backup
+config
+db_dump
+sql
+admin
+backup
+export
+dump
+log
+archive
+credentials
+token
+secret
+key
+jwt
+login
+users
+";
+
+    // 2. PUT YOUR ABLY KEY HERE:
+    const ABLY_KEY = 'Mpjnbg.4LhFpQ:Tt7TNZSn54xiHujnIEBPB5V6bKVw9ipNG--Ag42RGbc'; 
+
+    const log = document.getElementById('terminal-log');
+    const input = document.getElementById('user-input');
+
+    if (ABLY_KEY === 'YOUR_ABLY_API_KEY') {
+        log.textContent += "[ERROR]: Insert Ably API key on line 61.";
+    } else {
+        const ably = new Ably.Realtime(ABLY_KEY);
+        const channel = ably.channels.get('terminal-stream');
+
+        ably.connection.on('connected', () => {
+            input.disabled = false;
+            input.focus();
+        });
+
+        channel.subscribe('terminal-line', (message) => {
+            if (log.textContent === "") {
+                log.textContent += message.data.text;
+            } else {
+                log.textContent += `\n${message.data.text}`;
+            }
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        channel.subscribe('system-cmd', (message) => {
+            if (message.data.action === 'blackout') {
+                document.body.classList.add('stealth-mode');
+            }
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                const userText = this.value;
+
+                channel.publish('terminal-line', { text: `> ${userText}` });
+                this.value = ''; 
+
+                if (userText === "What A Dork!") {
+                    channel.publish('system-cmd', { action: 'blackout' });
+                    setTimeout(startSystemTyping, 800);
+                }
+            }
+        });
+
+        function startSystemTyping() {
+            let index = 0;
+            input.disabled = true; 
+
+            const typingInterval = setInterval(() => {
+                if (index < systemResponse.length) {
+                    input.value += systemResponse.charAt(index);
+                    index++;
+                } else {
+                    clearInterval(typingInterval);
+                    
+                    setTimeout(() => {
+                        channel.publish('terminal-line', { text: input.value });
+                        input.value = ''; 
+                        input.disabled = false; 
+                        input.focus();
+                    }, 1000);
+                }
+            }, 50); 
+        }
+    }
+</script>
+</body>
+</html>
